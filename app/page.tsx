@@ -1,7 +1,7 @@
 "use client";
 
 import { Input } from "@/components/ui/input";
-import { BotIcon } from "lucide-react";
+import { BotIcon,Trash2 } from "lucide-react";
 import { useState, useRef } from "react";
 
 import toast,{Toaster} from "react-hot-toast"
@@ -55,19 +55,23 @@ cache: "no-cache",
 
 
   return (
-    <main className=" ">
+    <main className=" h-screen flex items-center justify-center p-4 md:p-16">
       <Toaster
   position="top-center"
   reverseOrder={false}
 />
-      <div className="flex flex-col h-screen  p-4 md:p-16">
-        <header className="bg-gradient-to-r shadow-lg rounded-md from-blue-600 to-blue-900 text-white py-3 px-4 flex items-center">
-          <div className="flex items-center gap-2">
+      <div className="flex flex-col w-full max-w-7xl rounded-lg">
+        <header className="bg-gradient-to-r shadow-lg rounded-t-md from-blue-600 to-blue-900 text-white py-3 px-4 flex items-center">
+          <div className="flex items-center gap-2 justify-between w-full">
             <BotIcon className="w-6 h-6" />
             <h2 className="text-lg font-bold">Mental Health Chatbot</h2>
+            <Trash2 onClick={() => {
+              setChatHistory([])
+              toast.custom(<b>Your Chat is cleared</b>)
+            }} className="cursor-pointer active:scale-95 hover:scale-105 duration-300 ease-out hover:text-white/80" />
           </div>
         </header>
-        <div className="flex-1 overflow-auto p-4 flex flex-col gap-4">
+        <div className="flex-1 overflow-auto bg-neutral-100 p-4 flex flex-col gap-4 min-h-[38rem] md:min-h-[32rem] h-full">
           {chatHistory.map((chat, index) => {
             return (
               <ChatComponent
@@ -80,7 +84,7 @@ cache: "no-cache",
         </div>
         <form
           onSubmit={handleSubmit}
-          className="bg-gradient-to-r rounded-lg from-blue-600 to-blue-900 border-t px-4 py-3 flex items-center gap-2"
+          className="bg-gradient-to-r rounded-b-lg from-blue-600 to-blue-900 border-t px-4 py-3 flex items-center gap-2"
         >
           <Input
             value={input}
