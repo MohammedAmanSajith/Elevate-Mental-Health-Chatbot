@@ -3,12 +3,10 @@
 import { Input } from "@/components/ui/input";
 import { BotIcon } from "lucide-react";
 import { useState } from "react";
-import Markdown from "react-markdown";
 
-interface ChatHistory {
-  userInput: string;
-  botResponse: string;
-}
+import toast,{Toaster} from "react-hot-toast"
+import ChatComponent from "@/components/ChatComponent"
+
 
 export default function Home() {
   const [input, setInput] = useState<string>("");
@@ -16,7 +14,11 @@ export default function Home() {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
+    toast.loading(<b>Elevate is thinking...</b>, {
+      id: "chat-loader"
+    })
     fetch("http://localhost:3000/api/getResponse", {
+cache: "no-cache",
       method: "POST",
       body: JSON.stringify({
         input,
@@ -33,14 +35,28 @@ export default function Home() {
           userInput: botResponse.userInput,
         },
       ]);
+
+      toast.success(<b>Response Genrated... </b>, {
+        id: "chat-loader"
+      })
       setInput("");
+    }).catch((error) => {
+
+      toast.error(<b>Error Genrating Response from GPT... </b>)
+
+      console.error(error);
     });
   };
 
+
   return (
     <main className=" ">
-      <div className="flex flex-col h-screen shadow-lg p-4 md:p-16">
-        <header className="bg-gradient-to-r rounded-md from-blue-600 to-blue-900 text-white py-3 px-4 flex items-center">
+      <Toaster
+  position="top-center"
+  reverseOrder={false}
+/>
+      <div className="flex flex-col h-screen  p-4 md:p-16">
+        <header className="bg-gradient-to-r shadow-lg rounded-md from-blue-600 to-blue-900 text-white py-3 px-4 flex items-center">
           <div className="flex items-center gap-2">
             <BotIcon className="w-6 h-6" />
             <h2 className="text-lg font-bold">Mental Health Chatbot</h2>
@@ -77,36 +93,3 @@ export default function Home() {
   );
 }
 
-interface ChatComponentProps extends ChatHistory {}
-
-export const ChatComponent = ({
-  userInput,
-  botResponse,
-}: ChatComponentProps) => {
-  return (
-    <>
-      <div className="flex items-start gap-3">
-        <div className="rounded-lg w-10 h-10 bg-gradient-to-r from-[#55efc4] to-[#00b894] text-3xl flex items-center justify-center">
-          😁
-        </div>
-        <div className="grid gap-1 items-start text-sm">
-          <div className="font-bold text-[#7b2cbf]">Mental Health Chatbot</div>
-          <div>
-            <Markdown>{botResponse.toString()}</Markdown>
-          </div>
-        </div>
-      </div>
-      <div className="flex items-start gap-3 justify-end">
-        <div className="grid gap-1 items-end text-sm">
-          <div className="font-bold text-[#9d4edd]">You</div>
-          <div>
-            <p>{userInput}</p>
-          </div>
-        </div>
-        <div className="rounded-lg w-10 h-10 bg-gradient-to-r from-[#ffeaa7] to-[#fdcb6e] text-3xl flex items-center justify-center">
-          😎
-        </div>
-      </div>
-    </>
-  );
-};

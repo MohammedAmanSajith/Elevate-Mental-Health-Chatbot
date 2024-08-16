@@ -7,7 +7,7 @@ export async function POST(request: Request) {
 
   const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
   const result = await model.generateContent([
-    `${data.input}, Act as an Mental health Chatbot and reply`,
+    `${data.input}, Act as an Mental health Chatbot and reply your name is Elevate`,
   ]);
 
   return NextResponse.json({
