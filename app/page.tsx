@@ -20,7 +20,7 @@ export default function Home() {
     toast.loading(<b>Elevate is thinking...</b>, {
       id: "chat-loader"
     })
-    fetch("http://localhost:3000/api/getResponse", {
+    fetch(`${process.env.NEXT_PUBLIC_HOSTNAME}/api/getResponse`, {
 cache: "no-cache",
       method: "POST",
       body: JSON.stringify({
