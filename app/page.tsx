@@ -3,7 +3,7 @@
 import { Input } from "@/components/ui/input";
 import { BotIcon,Trash2 } from "lucide-react";
 import { useState, useRef } from "react";
-
+import {cn} from "@/lib/utils"
 import toast,{Toaster} from "react-hot-toast"
 import ChatComponent from "@/components/ChatComponent"
 
@@ -68,7 +68,7 @@ cache: "no-cache",
             <Trash2 onClick={() => {
               setChatHistory([])
               toast.custom(<b>Your Chat is cleared</b>)
-            }} className="cursor-pointer active:scale-95 hover:scale-105 duration-300 ease-out hover:text-white/80" />
+            }} className={cn(chatHistory.length === 0 && "invisible","cursor-pointer active:scale-95 hover:scale-105 duration-300 ease-out hover:text-white/80")} />
           </div>
         </header>
         <div className="flex-1 overflow-auto bg-neutral-100 p-4 flex flex-col gap-4 min-h-[38rem] md:min-h-[32rem] h-full">
