@@ -2,7 +2,7 @@
 
 import { Input } from "@/components/ui/input";
 import { BotIcon } from "lucide-react";
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 import toast,{Toaster} from "react-hot-toast"
 import ChatComponent from "@/components/ChatComponent"
@@ -11,9 +11,12 @@ import ChatComponent from "@/components/ChatComponent"
 export default function Home() {
   const [input, setInput] = useState<string>("");
   const [chatHistory, setChatHistory] = useState<ChatHistory[]>([]);
+  const buttonRef = useRef<HTMLButtonElement>(null)
 
   const handleSubmit = (e: any) => {
+    if (!buttonRef.current) return 
     e.preventDefault();
+    buttonRef.current.disabled = true;
     toast.loading(<b>Elevate is thinking...</b>, {
       id: "chat-loader"
     })
@@ -27,6 +30,7 @@ cache: "no-cache",
         "Content-type": "application/json",
       },
     }).then(async (response) => {
+      if (!buttonRef.current) return 
       const botResponse = await response.json();
       setChatHistory((chatHistory) => [
         ...chatHistory,
@@ -39,6 +43,7 @@ cache: "no-cache",
       toast.success(<b>Response Genrated... </b>, {
         id: "chat-loader"
       })
+      buttonRef.current.disabled = false;
       setInput("");
     }).catch((error) => {
 
@@ -84,7 +89,7 @@ cache: "no-cache",
             placeholder="Type your message..."
             className="flex-1 bg-white/20 px-4 py-2 text-sm text-white placeholder:text-white/50"
           />
-          <button type="submit" className="btn">
+          <button ref={buttonRef} disabled={!input} type="submit" className="btn">
             Chat
           </button>
         </form>
